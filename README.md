@@ -10,7 +10,7 @@ Advanced OSINT investigation tool for Termux
 
 ## Installation
 ```bash
-curl -sL https://raw.githubusercontent.com/FENRTH/FEN-OSINT/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/FENRTH/FEN-OSINT/main/install.sh | bash && cd FEN-OSINT && ./fenosint.py
 ```
 
 ## Usage
