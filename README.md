@@ -9,8 +9,7 @@ Advanced OSINT investigation tool for Termux
 - Clean interface with rich output
 
 ## Installation
-```bash
-termux-setup-storage && pkg update -y && pkg install -y python git && pip install requests rich && git clone https://github.com/FENRTH/FEN-OSINT.git && cd FEN-OSINT && python fenosint.py
+```curl -sL https://raw.githubusercontent.com/FENRTH/FEN-OSINT/main/install.sh | bash
 ```
 
 ## Usage
