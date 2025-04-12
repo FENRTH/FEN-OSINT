@@ -1,4 +1,3 @@
-pkg update -y && pkg upgrade -y && pkg install -y python git && pip install requests bs4 rich && git clone https://github.com/FENRTH/FEN-OSINT.git && cd FEN-OSINT && python -c "import os; os.chmod('fen_osint.py', 0o755)" && ./fen_osint.py
-#просто скопируйте это и вставьте в консоль 
+pkg update -y && pkg upgrade -y && pkg install -y python git && pip install --quiet requests bs4 rich && if [ -d "FEN-OSINT" ]; then rm -rf FEN-OSINT; fi && git clone --quiet https://github.com/FENRTH/FEN-OSINT.git && cd FEN-OSINT && python -c "import os; os.chmod('fenosint.py', 0o755)" && ./fenosint.py
 
 #пароль FENDARK
