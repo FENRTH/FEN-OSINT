@@ -1,39 +1,60 @@
 #!/bin/bash
-# FEN-OSINT Auto-Installer v5.0
+# FEN-OSINT Auto-Installer v8.0
 
-echo -e "\e[1;36mFEN-OSINT Ultimate Installer\e[0m"
-echo -e "\e[1;33mDeveloper: FEN\e[0m"
+# Цвета
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+NC='\033[0m'
+
+echo -e "${BLUE}"
+cat << "EOF"
+  _____ ______ _   _ _______ 
+ |  ___|___  /| \ | |__   __|
+ | |__    / / |  \| |  | |   
+ |  __|  / /  | . ` |  | |   
+ | |___./ /___| |\  |  | |   
+ |_____/_____|_| \_|  |_|   
+EOF
+echo -e "${NC}"
 
 # Проверка Termux
 if [ ! -d "/data/data/com.termux/files/usr" ]; then
-    echo -e "\e[1;31mОшибка: Этот установщик работает только в Termux!\e[0m"
+    echo -e "${RED}Ошибка: Этот скрипт работает только в Termux!${NC}"
     exit 1
 fi
 
-# Обновление пакетов
-echo -e "\e[1;32m[1/5] Обновление пакетов...\e[0m"
+echo -e "${YELLOW}[1/3] Обновление пакетов...${NC}"
 pkg update -y && pkg upgrade -y
 
-# Установка зависимостей
-echo -e "\e[1;32m[2/5] Установка зависимостей...\e[0m"
-pkg install -y python git python-pip
+echo -e "${YELLOW}[2/3] Установка зависимостей...${NC}"
+pkg install -y python git
+pip install requests rich
 
-# Установка Python-библиотек
-echo -e "\e[1;32m[3/5] Установка Python-пакетов...\e[0m"
-pip install requests bs4 rich phonenumbers
-
-# Загрузка программы
-echo -e "\e[1;32m[4/5] Загрузка FEN-OSINT...\e[0m"
+echo -e "${YELLOW}[3/3] Загрузка программы...${NC}"
 if [ -d "FEN-OSINT" ]; then
     rm -rf FEN-OSINT
 fi
 git clone https://github.com/FENRTH/FEN-OSINT.git
 
-# Настройка прав
-echo -e "\e[1;32m[5/5] Настройка...\e[0m"
+# Автозапуск
+echo -e "${GREEN}"
+cat << "EOF"
+ ___ _   _  ___ ___ ___  ___ ___ 
+/ __| | | |/ __/ _ \ _ \/ __/ __|
+\__ \ |_| | (_|  __/   /\__ \__ \
+|___/\__,_|\___\___|_|_\|___/___/
+EOF
+echo -e "${NC}"
+
 cd FEN-OSINT
 chmod +x fenosint.py
 
-echo -e "\e[1;32mУстановка завершена!\e[0m"
-echo -e "Запуск: \e[1;36mcd FEN-OSINT && ./fenosint.py\e[0m"
-echo -e "Пароль: \e[1;33mFENDARK\e[0m"
+# Добавляем автозапуск в .bashrc
+if ! grep -q "fenosint.py" ~/.bashrc; then
+    echo "cd ~/FEN-OSINT && python fenosint.py" >> ~/.bashrc
+fi
+
+echo -e "${GREEN}Установка завершена! Перезапустите Termux.${NC}"
+echo -e "Код доступа: ${YELLOW}FENDARK${NC}"
