@@ -1,103 +1,67 @@
 #!/usr/bin/env python3
-# FEN-OSINT Ultimate v4.0
-# Developer: FEN
-# GitHub: https://github.com/FENRTH/FEN-OSINT
+# FEN-OSINT Ultimate v5.0
 
 import os
 import sys
-import json
-import requests
-import platform
-from getpass import getpass
-from rich.console import Console
-from rich.panel import Panel
-from rich.table import Table
+from modules.ip_lookup import ip_search
+from modules.username_search import username_search
+from modules.phone_lookup import phone_search
 
-console = Console()
-CONFIG_DIR = os.path.expanduser("~/.fenosint")
-CONFIG_FILE = os.path.join(CONFIG_DIR, "config.json")
-PASSWORD = "FENDARK"
-VERSION = "4.0"
+def clear():
+    os.system('clear' if os.name == 'posix' else 'cls')
 
-class FENOSINT:
-    def __init__(self):
-        self.config = self.load_config()
-        self.session = requests.Session()
-        self.session.headers.update({'User-Agent': 'FEN-OSINT/4.0'})
+def banner():
+    print("""
+\033[1;36m
+███████╗███████╗███╗   ██╗
+██╔════╝██╔════╝████╗  ██║
+█████╗  █████╗  ██╔██╗ ██║
+██╔══╝  ██╔══╝  ██║╚██╗██║
+███████╗███████╗██║ ╚████║
+╚══════╝╚══════╝╚═╝  ╚═══╝
+\033[1;35m
+  OSINT Tool v5.0 | By FEN
+\033[0m""")
 
-    def load_config(self):
-        default_config = {
-            "api_keys": {"numlookup": None},
-            "settings": {"timeout": 15}
-        }
-        try:
-            if os.path.exists(CONFIG_FILE):
-                with open(CONFIG_FILE, "r") as f:
-                    return json.load(f)
-        except:
-            pass
-        return default_config
-
-    def check_password(self):
-        for _ in range(3):
-            if getpass("[?] Password: ") == PASSWORD:
-                return True
-            print("[!] Invalid password!")
-        return False
-
-    def ip_lookup(self, ip):
-        try:
-            response = self.session.get(f"http://ip-api.com/json/{ip}")
-            data = response.json()
-            table = Table(title="IP Info")
-            table.add_column("Field", style="cyan")
-            table.add_column("Value", style="green")
-            for k, v in data.items():
-                table.add_row(k, str(v))
-            console.print(table)
-        except Exception as e:
-            print(f"[!] Error: {e}")
-
-    def username_search(self, username):
-        sites = {
-            "GitHub": f"https://github.com/{username}",
-            "Twitter": f"https://twitter.com/{username}",
-            "VK": f"https://vk.com/{username}"
-        }
-        results = []
-        for site, url in sites.items():
-            try:
-                if requests.head(url).status_code == 200:
-                    results.append(f"[+] {site}: {url}")
-            except:
-                results.append(f"[!] {site} error")
-        console.print(Panel("\n".join(results)))
-
-    def show_menu(self):
-        while True:
-            console.print("\n[bold]FEN-OSINT MENU[/bold]")
-            console.print("1. IP Lookup\n2. Username Search\n3. Exit")
-            choice = input("Select: ")
-            
-            if choice == "1":
-                self.ip_lookup(input("IP: "))
-            elif choice == "2":
-                self.username_search(input("Username: "))
-            elif choice == "3":
-                sys.exit()
-            else:
-                print("Invalid choice!")
+def check_pass():
+    password = input("\033[1;33mВведите пароль: \033[0m")
+    return password == "FENDARK"
 
 def main():
-    os.system('clear')
-    print(Panel.fit(f"FEN-OSINT v{VERSION}"))
+    clear()
+    banner()
     
-    tool = FENOSINT()
-    if not tool.check_password():
-        print("[!] Access denied!")
-        return
+    if not check_pass():
+        print("\033[1;31mНеверный пароль!\033[0m")
+        sys.exit()
     
-    tool.show_menu()
+    while True:
+        print("\n\033[1;34mГлавное меню:\033[0m")
+        print("1. Поиск по IP")
+        print("2. Поиск по имени пользователя")
+        print("3. Поиск по номеру телефона")
+        print("4. Выход")
+        
+        choice = input("\n\033[1;35mВыберите вариант: \033[0m")
+        
+        if choice == "1":
+            ip = input("Введите IP-адрес: ")
+            ip_search(ip)
+        elif choice == "2":
+            username = input("Введите имя пользователя: ")
+            username_search(username)
+        elif choice == "3":
+            phone = input("Введите номер телефона: ")
+            phone_search(phone)
+        elif choice == "4":
+            print("\033[1;32mВыход...\033[0m")
+            sys.exit()
+        else:
+            print("\033[1;31mНеверный выбор!\033[0m")
+        
+        input("\nНажмите Enter чтобы продолжить...")
+        clear()
+        banner()
 
 if __name__ == "__main__":
     main()
