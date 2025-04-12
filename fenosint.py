@@ -1,3 +1,31 @@
+from rich.console import Console
+from rich.panel import Panel
+
+def show_banner():
+    console = Console()
+    banner = """
+[bold red]
+ ██████╗ ███████╗███╗   ██╗
+██╔═══██╗██╔════╝████╗  ██║
+██║   ██║███████╗██╔██╗ ██║
+██║   ██║╚════██║██║╚██╗██║
+╚██████╔╝███████║██║ ╚████║
+ ╚═════╝ ╚══════╝╚═╝  ╚═══╝
+[bold blue]
+ ██████╗ ███████╗███╗   ██╗██╗████████╗
+██╔═══██╗██╔════╝████╗  ██║██║╚══██╔══╝
+██║   ██║███████╗██╔██╗ ██║██║   ██║   
+██║   ██║╚════██║██║╚██╗██║██║   ██║   
+╚██████╔╝███████║██║ ╚████║██║   ██║   
+ ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝   ╚═╝   
+[/bold blue]
+[bold green]
+      Termux OSINT Tool v7.0
+      Created by [bold yellow]FEN[/bold yellow]
+[/bold green]
+"""
+    console.print(Panel.fit(banner, style="bold cyan"))
+    show_banner()  # Показ баннера при запуске
 #!/usr/bin/env python3
 # FEN-OSINT UltraLite v6.0 - гарантированно работает в Termux
 
