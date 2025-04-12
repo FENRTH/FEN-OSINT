@@ -1,0 +1,8 @@
+#как запускать на Termux 
+1. pkg update && pkg upgrade -y
+2. pkg install python git -y
+3. pip install requests bs4
+4. git clone https://github.com/FENRTH/FEN-OSINT.git
+5. cd FEN-OSINT
+6. chmod +x fen_osint.py
+7. python fen_osint.py 
