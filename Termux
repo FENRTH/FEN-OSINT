@@ -1,0 +1,7 @@
+pkg update -y && pkg upgrade -y
+pkg install -y python git
+pip install requests bs4 rich
+git clone https://github.com/FENRTH/FEN-OSINT.git
+cd FEN-OSINT
+chmod +x fen_osint.py
+#пароль FENDARK
