@@ -1,9 +1,17 @@
+#!/usr/bin/env python3
+# FEN-OSINT v8.0
+
+import os
+import sys
+import requests
 from rich.console import Console
 from rich.panel import Panel
 
+console = Console()
+ACCESS_CODE = "FENDARK"  # Измените этот код!
+
 def show_banner():
-    console = Console()
-    banner = """
+    console.print(Panel.fit("""
 [bold red]
  ██████╗ ███████╗███╗   ██╗
 ██╔═══██╗██╔════╝████╗  ██║
@@ -11,60 +19,55 @@ def show_banner():
 ██║   ██║╚════██║██║╚██╗██║
 ╚██████╔╝███████║██║ ╚████║
  ╚═════╝ ╚══════╝╚═╝  ╚═══╝
-[bold blue]
+[/bold red][bold blue]
  ██████╗ ███████╗███╗   ██╗██╗████████╗
 ██╔═══██╗██╔════╝████╗  ██║██║╚══██╔══╝
 ██║   ██║███████╗██╔██╗ ██║██║   ██║   
 ██║   ██║╚════██║██║╚██╗██║██║   ██║   
 ╚██████╔╝███████║██║ ╚████║██║   ██║   
  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚═╝   ╚═╝   
-[/bold blue]
-[bold green]
-      Termux OSINT Tool v7.0
+[/bold blue][bold green]
+      Termux OSINT Tool v8.0
       Created by [bold yellow]FEN[/bold yellow]
-[/bold green]
-"""
-    console.print(Panel.fit(banner, style="bold cyan"))
-    show_banner()  # Показ баннера при запуске
-#!/usr/bin/env python3
-# FEN-OSINT UltraLite v6.0 - гарантированно работает в Termux
+[/bold green]"""))
 
-import os
-import requests
-from rich.console import Console
+def check_code():
+    for attempt in range(3):
+        code = input("[?] Введите код доступа: ")
+        if code == ACCESS_CODE:
+            return True
+        print(f"[!] Неверный код! Попыток осталось: {2-attempt}")
+    return False
 
-console = Console()
-PASSWORD = "FENDARK"
-
-def clear():
-    os.system('clear')
-
-def show_menu():
-    clear()
-    console.print("[bold green]FEN-OSINT UltraLite v6.0[/]")
-    console.print("[yellow]1. Поиск по IP[/]\n[yellow]2. Поиск по имени[/]\n[yellow]3. Выход[/]")
-    
-    choice = input("Выберите: ")
-    if choice == "1":
-        ip = input("Введите IP: ")
-        result = requests.get(f"http://ip-api.com/json/{ip}").json()
-        console.print(f"[green]Страна:[/] {result.get('country', '?')}")
-        console.print(f"[green]Город:[/] {result.get('city', '?')}")
-    elif choice == "2":
-        user = input("Введите имя: ")
-        console.print(f"[green]Проверяю GitHub...[/]")
-        if requests.get(f"https://github.com/{user}").status_code == 200:
-            console.print(f"[green]Найден:[/] github.com/{user}")
-    elif choice == "3":
-        exit()
+def main_menu():
+    while True:
+        console.print("\n[bold cyan]ГЛАВНОЕ МЕНЮ[/bold cyan]")
+        console.print("1. Поиск по IP\n2. Поиск по имени\n3. Выход")
+        choice = input("> ")
+        
+        if choice == "1":
+            ip = input("IP: ")
+            data = requests.get(f"http://ip-api.com/json/{ip}").json()
+            console.print(f"[green]Страна:[/green] {data.get('country', '?')}")
+        elif choice == "2":
+            user = input("Имя: ")
+            console.print(f"[green]Проверяю GitHub...[/green]")
+            if requests.get(f"https://github.com/{user}").status_code == 200:
+                console.print(f"[green]Найден: github.com/{user}[/green]")
+        elif choice == "3":
+            sys.exit()
+        else:
+            console.print("[red]Неверный выбор![/red]")
 
 if __name__ == "__main__":
-    if input("Пароль: ") == PASSWORD:
+    os.system("clear")
+    show_banner()
+    if check_code():
         while True:
             try:
-                show_menu()
-                input("\nEnter чтобы продолжить...")
-            except:
-                console.print("[red]Ошибка! Проверьте интернет.[/]")
+                main_menu()
+            except Exception as e:
+                console.print(f"[red]Ошибка: {e}[/red]")
     else:
-        console.print("[red]Неверный пароль![/]")
+        console.print("[red]Доступ запрещен![/red]")
+        sys.exit()
